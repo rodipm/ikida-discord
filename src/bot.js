@@ -20,10 +20,9 @@ dbclient.query(`SELECT * FROM frases`, (err, res) => {
     if (err) throw err;
     for (let row of res.rows) {
         console.log(row.frase);
-        frases.push(row);
+        frases.push(row.frase);
     }
 });
-
 
 function respondRandomPhrase(msg) {
     let frase = frases[Math.floor(Math.random() * frases.length)];
