@@ -2,6 +2,7 @@
 const Discord = require('discord.js');
 const fs = require('fs');
 
+console.log(process.env.BOT_TOKEN)
 const client = new Discord.Client();
 
 let raw_frases = fs.readFileSync('frases.json');
