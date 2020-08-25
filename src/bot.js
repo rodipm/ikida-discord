@@ -41,7 +41,7 @@ client.on('message', msg => {
         const new_phrase = msg.content.substring(PREFIX.length).trim();
         console.log(new_phrase);
         if (new_phrase) {
-            if (msg.member.roles.cache.find(r => r.name === "Gera")) {
+            if (msg.member.roles.cache.find(r => r.name === "Editor Chefe")) {
                 addPhrase(new_phrase);
             }
         }
