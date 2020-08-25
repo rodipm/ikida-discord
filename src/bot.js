@@ -2,7 +2,6 @@
 const Discord = require('discord.js');
 const fs = require('fs');
 
-console.log(process.env.BOT_TOKEN)
 const client = new Discord.Client();
 
 let raw_frases = fs.readFileSync('frases.json');
@@ -37,4 +36,4 @@ client.on('message', msg => {
     }
 });
 
-client.login(process.env.BOT_TOKEN);
+// client.login(process.env.BOT_TOKEN);
