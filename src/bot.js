@@ -19,7 +19,6 @@ function respondRandomPhrase(msg) {
 function playTranscription(msg, frase) {
     var voiceChannel = msg.member.voice.channel;
     if (voiceChannel) {
-
         tts.synthesize(frase)
             .then(response => {
                 let audio = response.result;
