@@ -15,6 +15,9 @@
     "discord.js": "^12.3.1",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "ffmpeg-static": "^4.2.7",
+    "ibm-watson": "^5.6.2",
+    "opusscript": "0.0.7",
     "pg": "^8.3.2",
     "pg-format": "^1.0.4"
   }
