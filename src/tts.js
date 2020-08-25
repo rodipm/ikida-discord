@@ -8,7 +8,6 @@ const tts_client = new TextToSpeechV1({
     url: "https://stream.watsonplatform.net/text-to-speech/api",
 });
 
-
 function synthesize(text) {
     let params = {
         text: text,
