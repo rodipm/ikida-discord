@@ -1,5 +1,6 @@
 require('dotenv').config();
 const fs = require('fs');
+const express = require('express');
 
 const Discord = require('discord.js');
 const client = new Discord.Client();
@@ -51,3 +52,6 @@ client.on('message', msg => {
 });
 
 client.login(process.env.BOT_TOKEN).catch(console.error);
+
+const app = express();
+app.listen(process.env.PORT || 5000);
