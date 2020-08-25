@@ -35,7 +35,7 @@ const tts_client = new TextToSpeechV1({
 
 function respondRandomPhrase(msg) {
     let frase = frases[Math.floor(Math.random() * frases.length)];
-    msg.reply(`Frases Yuri DEV: \n\n${frase}`);
+    msg.reply(`Frases Yuri: \n\n${frase}`);
     msg.react('514865275473100800');
     playTranscription(msg, frase)
 }
@@ -53,19 +53,12 @@ function playTranscription(msg, frase) {
         tts_client.synthesize(params)
             .then(response => {
                 let audio = response.result;
-
-                var write_stream = fs.createWriteStream("output.mp3");
-                audio.pipe(write_stream);
-
-                audio.on('end', () => {
-                    console.log("data")
-                    voiceChannel.join().then(connection => {
-                        const dispatcher = connection.play('output.mp3');
-                        dispatcher.on("finish", end => {
-                            voiceChannel.leave();
-                        });
-                    }).catch(err => console.log(err));
-                })
+                voiceChannel.join().then(connection => {
+                    const dispatcher = connection.play(audio);
+                    dispatcher.on("finish", end => {
+                        voiceChannel.leave();
+                    });
+                });
             })
             .catch(console.error);
     }
