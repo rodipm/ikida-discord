@@ -1,13 +1,29 @@
 require('dotenv').config();
-const Discord = require('discord.js');
 const fs = require('fs');
 
+const Discord = require('discord.js');
 const client = new Discord.Client();
 
-let raw_frases = fs.readFileSync('frases.json');
-let frases = JSON.parse(raw_frases).frases;
+const { Client } = require('pg');
+const dbclient = new Client({
+    connectionString: process.env.DATABASE_URL,
+    ssl: {
+        rejectUnauthorized: false
+    }
+});
+dbclient.connect();
 
 const PREFIX = "!ikida";
+
+let frases = [];
+dbclient.query(`SELECT * FROM frases`, (err, res) => {
+    if (err) throw err;
+    for (let row of res.rows) {
+        console.log(row.frase);
+        frases.push(row);
+    }
+});
+
 
 function respondRandomPhrase(msg) {
     let frase = frases[Math.floor(Math.random() * frases.length)];
@@ -15,10 +31,10 @@ function respondRandomPhrase(msg) {
 }
 
 function addPhrase(new_phrase) {
-    frases.push(new_phrase);
-    console.log(frases)
-    let new_frases = { frases: frases }
-    fs.writeFile("frases.json", JSON.stringify(new_frases), () => { });
+    dbclient.query(`INSERT INTO frases (frase) VALUES ('${new_phrase}')`, (err, res) => {
+        if (err) throw err;
+        console.log(`${new_phrase} inserido no banco de frases`)
+    });
 }
 
 client.on('message', msg => {
@@ -36,5 +52,4 @@ client.on('message', msg => {
     }
 });
 
-console.log(process.env.BOT_TOKEN);
 client.login(process.env.BOT_TOKEN).catch(console.error);
