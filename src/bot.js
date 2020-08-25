@@ -28,6 +28,7 @@ dbclient.query(`SELECT * FROM frases`, (err, res) => {
 function respondRandomPhrase(msg) {
     let frase = frases[Math.floor(Math.random() * frases.length)];
     msg.reply(`Frases Yuri: \n\n${frase}`);
+    msg.react('\:guri:')
 }
 
 function addPhrase(new_phrase) {
