@@ -3,10 +3,14 @@ require('dotenv').config();
 const Discord = require('discord.js');
 const db = require('./db');
 const tts = require('./tts');
+const ytSearch = require('youtube-search');
+const ytdl = require('ytdl-core');
 
 const client = new Discord.Client();
 
-const PREFIX = "!ikida";
+const IKIDA = "!ikida";
+const PLEY = "-pley";
+const STOPE = "-stope";
 const ROLE_NAME = "Editor Chefe";
 
 function respondRandomPhrase(msg) {
@@ -33,17 +37,58 @@ function playTranscription(msg, frase) {
     }
 }
 
+let voiceChannel = undefined;
+
+function sendYoutubeVideo(msg, song_name) {
+    var opts = {
+        maxResults: 10,
+        key: process.env.YOUTUBE_API_KEY,
+    };
+
+    ytSearch(song_name, opts, function (err, results) {
+        if (err) return console.log(err);
+        if (!results.length) return;
+        let video_url = results[Math.floor(Math.random() * results.length)].link;
+
+        voiceChannel = msg.member.voice.channel;
+        if (voiceChannel) {
+            voiceChannel.join().then(connection => {
+                const stream = ytdl(video_url, { filter: 'audioonly' });
+                const dispatcher = connection.play(stream);
+                dispatcher.on("finish", end => {
+                    voiceChannel.leave();
+                });
+            });
+        }
+
+    });
+}
+
+function disconnectBotFromVoiceChannel() {
+    if (voiceChannel)
+        voiceChannel.leave();
+    voiceChannel = undefined;
+}
 client.on('message', msg => {
-    if (msg.content.startsWith(PREFIX)) {
-        const new_phrase = msg.content.substring(PREFIX.length).trim();
-        console.log(new_phrase);
+    if (msg.content.startsWith(IKIDA)) {
+        const new_phrase = msg.content.substring(IKIDA.length).trim();
         if (new_phrase) {
             if (msg.member.roles.cache.find(r => r.name === ROLE_NAME)) {
                 db.addPhrase(new_phrase);
+                msg.reply(`Frase adicionada: ${new_phrase}`)
+                playTranscription(msg, new_phrase);
             }
         }
         else
             respondRandomPhrase(msg);
+    }
+    else if (msg.content.startsWith(PLEY)) {
+        let song_name = msg.content.substring(IKIDA.length).trim();
+        song_name += " shred";
+        sendYoutubeVideo(msg, song_name);
+    }
+    else if (msg.content.startsWith(STOPE)) {
+        disconnectBotFromVoiceChannel();
     }
 });
 
