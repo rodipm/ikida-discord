@@ -69,6 +69,7 @@ function disconnectBotFromVoiceChannel() {
         voiceChannel.leave();
     voiceChannel = undefined;
 }
+
 client.on('message', msg => {
     if (msg.content.startsWith(IKIDA)) {
         const new_phrase = msg.content.substring(IKIDA.length).trim();
@@ -85,9 +86,9 @@ client.on('message', msg => {
     else if (msg.content.startsWith(PLEY)) {
         let song_name = msg.content.substring(IKIDA.length).trim();
 
-        let modifiers = ["shred", "bad quality", "played wrong", "fail"]
-        song_name += modifiers[Math.floor(Math.random() * modifiers.length)];
-
+        // let modifiers = ["shred", "bad quality", "played wrong", "fail"];
+        // song_name += modifiers[Math.floor(Math.random() * modifiers.length)];
+        song_name += "shred";
         sendYoutubeVideo(msg, song_name);
     }
     else if (msg.content.startsWith(STOPE)) {
