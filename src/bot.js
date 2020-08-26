@@ -84,7 +84,10 @@ client.on('message', msg => {
     }
     else if (msg.content.startsWith(PLEY)) {
         let song_name = msg.content.substring(IKIDA.length).trim();
-        song_name += " shred";
+
+        let modifiers = ["shred", "bad quality", "played wrong", "fail"]
+        song_name += modifiers[Math.floor(Math.random() * modifiers.length)];
+
         sendYoutubeVideo(msg, song_name);
     }
     else if (msg.content.startsWith(STOPE)) {
