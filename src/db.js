@@ -28,10 +28,13 @@ function deletePhrase(delete_phrase) {
         dbclient.query(`DELETE FROM frases WHERE frase = '${delete_phrase}'`, (err, res) => {
             if (err) reject(err);
 
-            console.log(res);
+            if (res.rowCount) {
+                resolve("Frase removida do banco de dados")
+                frases = frases.filter(frase => frase !== delete_phrase)
+            }
+            else
+                resolve("A frase não consta no banco de dados")
 
-            frases = frases.filter(frase => frase !== delete_phrase)
-            resolve("Frase removida do banco de dados")
         });
     })
 }
