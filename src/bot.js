@@ -72,20 +72,7 @@ function disconnectBotFromVoiceChannel() {
 }
 
 client.on('message', msg => {
-    if (msg.content.startsWith(IKIDA)) {
-        console.log("ikida")
-        const new_phrase = msg.content.substring(IKIDA.length).trim();
-        if (new_phrase) {
-            if (msg.member.roles.cache.find(r => r.name === ROLE_NAME)) {
-                db.addPhrase(new_phrase);
-                msg.reply(`Frase adicionada: ${new_phrase}`)
-                playTranscription(msg, new_phrase);
-            }
-        }
-        else
-            respondRandomPhrase(msg);
-    }
-    else if (msg.content.startsWith(IKIDA_DELETE)) {
+    if (msg.content.startsWith(IKIDA_DELETE)) {
         const delete_phrase = msg.content.substring(IKIDA_DELETE.length).trim();
         if (delete_phrase) {
             if (msg.member.roles.cache.find(r => r.name === ROLE_NAME)) {
@@ -99,6 +86,19 @@ client.on('message', msg => {
         }
         else
             msg.reply("Adicione a frase a ser deletada logo a seguir do comando !ikida_delete")
+    }
+    else if (msg.content.startsWith(IKIDA)) {
+        console.log("ikida")
+        const new_phrase = msg.content.substring(IKIDA.length).trim();
+        if (new_phrase) {
+            if (msg.member.roles.cache.find(r => r.name === ROLE_NAME)) {
+                db.addPhrase(new_phrase);
+                msg.reply(`Frase adicionada: ${new_phrase}`)
+                playTranscription(msg, new_phrase);
+            }
+        }
+        else
+            respondRandomPhrase(msg);
     }
     else if (msg.content.startsWith(PLEY)) {
         let song_name = msg.content.substring(IKIDA.length).trim();
