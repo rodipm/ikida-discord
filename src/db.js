@@ -27,6 +27,9 @@ function deletePhrase(delete_phrase) {
     return new Promise((resolve, reject) => {
         dbclient.query(`DELETE FROM frases WHERE frase = '${delete_phrase}'`, (err, res) => {
             if (err) reject(err);
+
+            console.log(res);
+
             frases = frases.filter(frase => frase !== delete_phrase)
             resolve("Frase removida do banco de dados")
         });
