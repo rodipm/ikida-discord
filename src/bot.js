@@ -9,6 +9,7 @@ const ytdl = require('ytdl-core');
 const client = new Discord.Client();
 
 const IKIDA = "!ikida";
+const IKIDA_DELETE = "!ikida_delete";
 const PLEY = "-pley";
 const STOPE = "-stope";
 const ROLE_NAME = "Editor Chefe";
@@ -72,6 +73,7 @@ function disconnectBotFromVoiceChannel() {
 
 client.on('message', msg => {
     if (msg.content.startsWith(IKIDA)) {
+        console.log("ikida")
         const new_phrase = msg.content.substring(IKIDA.length).trim();
         if (new_phrase) {
             if (msg.member.roles.cache.find(r => r.name === ROLE_NAME)) {
@@ -83,11 +85,24 @@ client.on('message', msg => {
         else
             respondRandomPhrase(msg);
     }
+    else if (msg.content.startsWith(IKIDA_DELETE)) {
+        const delete_phrase = msg.content.substring(IKIDA_DELETE.length).trim();
+        if (delete_phrase) {
+            if (msg.member.roles.cache.find(r => r.name === ROLE_NAME)) {
+                db.deletePhrase(delete_phrase)
+                    .then(res => msg.reply(res))
+                    .catch(er => {
+                        console.error(er)
+                        msg.reply("Erro ao tentar remover a frase do banco")
+                    })
+            }
+        }
+        else
+            msg.reply("Adicione a frase a ser deletada logo a seguir do comando !ikida_delete")
+    }
     else if (msg.content.startsWith(PLEY)) {
         let song_name = msg.content.substring(IKIDA.length).trim();
 
-        // let modifiers = ["shred", "bad quality", "played wrong", "fail"];
-        // song_name += modifiers[Math.floor(Math.random() * modifiers.length)];
         song_name += "shred";
         sendYoutubeVideo(msg, song_name);
     }

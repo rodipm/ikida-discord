@@ -23,4 +23,14 @@ function addPhrase(new_phrase) {
     });
 }
 
-module.exports = { frases, addPhrase }
+function deletePhrase(delete_phrase) {
+    return new Promise((resolve, reject) => {
+        dbclient.query(`DELETE FROM frases WHERE frase = '${delete_phrase}'`, (err, res) => {
+            if (err) reject(err);
+            frases = frases.filter(frase => frase !== delete_phrase)
+            resolve("Frase removida do banco de dados")
+        });
+    })
+}
+
+module.exports = { frases, addPhrase, deletePhrase }
